@@ -1,0 +1,251 @@
+/* ── Note Reviewer Plugin ─────────────────────────────────── */
+
+.note-reviewer-modal .modal-content {
+  padding: 1.5rem;
+  max-width: 580px;
+  width: 100%;
+}
+
+/* Typography */
+.nr-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--text-normal);
+}
+.nr-done-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+  color: var(--text-normal);
+}
+.nr-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0 0 1.5rem;
+  line-height: 1.7;
+}
+.nr-hint {
+  font-size: 11px;
+  color: var(--text-faint);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Header row */
+.nr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.nr-counter { font-size: 12px; color: var(--text-faint); }
+.nr-pill-del {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: rgba(192, 57, 43, 0.15);
+  color: #e07070;
+  margin-left: 6px;
+}
+
+/* Undo button */
+.nr-undo-btn {
+  font-size: 12px;
+  color: var(--text-faint);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.nr-undo-btn:hover:not(:disabled) {
+  background: var(--background-secondary);
+  color: var(--text-muted);
+}
+.nr-undo-btn:disabled { opacity: 0.25; cursor: default; }
+
+/* Progress bar */
+.nr-track {
+  height: 3px;
+  background: var(--background-secondary);
+  border-radius: 2px;
+  margin-bottom: 0.75rem;
+}
+.nr-fill {
+  height: 100%;
+  background: var(--interactive-accent);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Card */
+.nr-card-wrap {
+  position: relative;
+  height: 370px;
+  margin: 0.75rem 0;
+  overflow: hidden;
+}
+.nr-card {
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  position: absolute;
+  inset: 0;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+.nr-out-left  { transform: translateX(-115%) rotate(-7deg); opacity: 0; }
+.nr-out-right { transform: translateX(115%) rotate(7deg); opacity: 0; }
+
+.nr-filepath {
+  font-size: 11px;
+  color: var(--text-faint);
+  margin: 0 0 6px;
+  font-family: var(--font-monospace);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.nr-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+.nr-note-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-normal);
+  margin: 0;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.nr-btn-open {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--interactive-accent);
+  background: none;
+  border: 1px solid var(--interactive-accent);
+  border-radius: 20px;
+  padding: 2px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.nr-btn-open:hover { background: var(--background-modifier-hover); }
+
+.nr-nbody {
+  overflow-y: auto;
+  max-height: 270px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+.nr-empty { color: var(--text-faint); font-style: italic; }
+
+/* Action buttons */
+.nr-btn-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+.nr-btn {
+  flex: 1;
+  max-width: 160px;
+  padding: 10px 0;
+  border-radius: 8px;
+  border: 1px solid;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.15s;
+  background: transparent;
+}
+.nr-btn:active { transform: scale(0.97); }
+.nr-btn-del   { border-color: #c0392b; color: #e07070; }
+.nr-btn-del:hover  { background: rgba(192, 57, 43, 0.1); }
+.nr-btn-keep  { border-color: #1D9E75; color: #5ecba1; }
+.nr-btn-keep:hover { background: rgba(29, 158, 117, 0.1); }
+.nr-btn-primary {
+  padding: 10px 28px;
+  border-radius: 8px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  font-size: 14px;
+  cursor: pointer;
+  max-width: 180px;
+}
+.nr-btn-primary:hover { background: var(--background-modifier-hover); }
+.nr-btn-secondary {
+  padding: 10px 28px;
+  border-radius: 8px;
+  border: 1px solid var(--background-modifier-border);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  max-width: 180px;
+}
+
+/* Stats (done screen) */
+.nr-stats { display: flex; gap: 10px; margin-bottom: 1.25rem; }
+.nr-statcard {
+  background: var(--background-secondary);
+  border-radius: 8px;
+  padding: 1rem;
+  flex: 1;
+  text-align: center;
+}
+.nr-stat-label { font-size: 12px; color: var(--text-muted); margin: 0 0 4px; }
+.nr-stat-value { font-size: 24px; font-weight: 600; color: var(--text-normal); margin: 0; }
+
+/* Deleted file list */
+.nr-flist {
+  background: var(--background-secondary);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  max-height: 180px;
+  overflow-y: auto;
+  margin-bottom: 1.5rem;
+}
+.nr-fitem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--background-modifier-border);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.nr-fitem:last-child { border-bottom: none; }
+.nr-del-icon { color: #c0392b; font-size: 10px; }
+.nr-del-path { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+/* Settings tab */
+.nr-settings-coffee {
+  background: var(--background-secondary);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.nr-settings-coffee-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: var(--text-normal);
+}
+.nr-settings-coffee-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0 0 8px;
+}
+.nr-settings-coffee-link {
+  font-size: 13px;
+  color: var(--interactive-accent);
+}
