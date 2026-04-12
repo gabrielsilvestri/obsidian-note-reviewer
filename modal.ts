@@ -16,6 +16,8 @@ export class ReviewModal extends Modal {
   private animating = false;
   private component = new Component();
   private keyHandler: (e: KeyboardEvent) => void;
+  private animationTimeout: ReturnType<typeof setTimeout> | null = null;
+  private currentCard: HTMLElement | null = null;
 
   constructor(app: App, plugin: NoteReviewerPlugin) {
     super(app);
@@ -51,6 +53,7 @@ export class ReviewModal extends Modal {
   }
 
   onClose() {
+    if (this.animationTimeout) clearTimeout(this.animationTimeout);
     document.removeEventListener('keydown', this.keyHandler);
     this.component.unload();
     this.contentEl.empty();
@@ -79,7 +82,7 @@ export class ReviewModal extends Modal {
 
   // ── Session management ──────────────────────────────────────────────────
 
-  private startNewSession(allFiles: TFile[]) {
+  private async startNewSession(allFiles: TFile[]) {
     const shuffled = [...allFiles];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -92,7 +95,7 @@ export class ReviewModal extends Modal {
     this.plugin.data.reviewed = [];
     this.plugin.data.deleted = [];
     this.plugin.data.sessionActive = true;
-    this.plugin.savePluginData();
+    await this.plugin.savePluginData();
     this.renderReview();
   }
 
@@ -139,7 +142,8 @@ export class ReviewModal extends Modal {
     // Card
     const card = contentEl
       .createDiv({ cls: 'nr-card-wrap' })
-      .createDiv({ cls: 'nr-card', attr: { id: 'nr-card' } });
+      .createDiv({ cls: 'nr-card' });
+    this.currentCard = card;
 
     card.createEl('p', { text: file.path, cls: 'nr-filepath' });
 
@@ -196,7 +200,7 @@ export class ReviewModal extends Modal {
     if (!keep) {
       try {
         const content = await this.app.vault.read(file);
-        await this.app.vault.trash(file, true);
+        await this.app.vault.trash(file, false);
         this.deletedInSession.push(file.path);
         this.undoStack.push({ file, content, originalPath: file.path });
         this.plugin.data.deleted.push(file.path);
@@ -207,10 +211,11 @@ export class ReviewModal extends Modal {
       }
     }
 
-    const card = document.getElementById('nr-card');
+    const card = this.currentCard;
     if (card) {
       card.classList.add(keep ? 'nr-out-right' : 'nr-out-left');
-      setTimeout(async () => {
+      this.animationTimeout = setTimeout(async () => {
+        this.animationTimeout = null;
         this.animating = false;
         this.plugin.data.reviewed.push(file.path);
         this.plugin.data.totalReviewed++;
@@ -233,7 +238,6 @@ export class ReviewModal extends Modal {
       this.plugin.data.reviewed = this.plugin.data.reviewed.filter(p => p !== last.originalPath);
       this.plugin.data.totalReviewed = Math.max(0, this.plugin.data.totalReviewed - 1);
       this.currentIdx = Math.max(0, this.currentIdx - 1);
-      this.remaining.splice(this.currentIdx, 0, last.file);
       await this.plugin.savePluginData();
       this.renderReview();
     } catch (e) {
@@ -244,7 +248,7 @@ export class ReviewModal extends Modal {
 
   // ── Screen: Done ────────────────────────────────────────────────────────
 
-  private renderDone() {
+  private async renderDone() {
     const kept = this.remaining.length - this.deletedInSession.length;
     const { contentEl } = this;
     contentEl.empty();
@@ -284,7 +288,7 @@ export class ReviewModal extends Modal {
     }
 
     this.plugin.data.sessionActive = false;
-    this.plugin.savePluginData();
+    await this.plugin.savePluginData();
 
     contentEl
       .createDiv({ cls: 'nr-btn-row' })
