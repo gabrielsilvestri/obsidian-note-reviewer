@@ -190,6 +190,7 @@ export class ReviewModal extends Modal {
 
   private async decide(keep: boolean) {
     if (this.animating || this.currentIdx >= this.remaining.length) return;
+    this.animating = true;
     const file = this.remaining[this.currentIdx];
 
     if (!keep) {
@@ -200,6 +201,7 @@ export class ReviewModal extends Modal {
         this.undoStack.push({ file, content, originalPath: file.path });
         this.plugin.data.deleted.push(file.path);
       } catch (e) {
+        this.animating = false;
         console.error('Note Reviewer: error trashing file', e);
         return;
       }
@@ -207,7 +209,6 @@ export class ReviewModal extends Modal {
 
     const card = document.getElementById('nr-card');
     if (card) {
-      this.animating = true;
       card.classList.add(keep ? 'nr-out-right' : 'nr-out-left');
       setTimeout(async () => {
         this.animating = false;
@@ -217,6 +218,8 @@ export class ReviewModal extends Modal {
         this.currentIdx++;
         this.renderReview();
       }, 240);
+    } else {
+      this.animating = false;
     }
   }
 
