@@ -1,9 +1,9 @@
 {
-  "id": "obsidian-note-reviewer",
-  "name": "Note Reviewer",
+  "id": "vault-tinder",
+  "name": "Vault Tinder",
   "version": "1.0.1",
   "minAppVersion": "1.0.0",
-  "description": "Review and declutter your vault one note at a time. Keep or trash notes with keyboard shortcuts, track progress across sessions.",
+  "description": "Declutter your vault one note at a time — keep or trash with a single keypress. Like Tinder for notes. Perfect for vaults with hundreds of forgotten drafts, dead-project notes, or ideas you never developed.",
   "author": "Gabriel Silvestri",
   "authorUrl": "https://buymeacoffee.com/gabrielsilvestri",
   "fundingUrl": "https://buymeacoffee.com/gabrielsilvestri",
