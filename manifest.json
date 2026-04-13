@@ -1,7 +1,7 @@
 {
   "id": "note-reviewer",
   "name": "Note Reviewer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minAppVersion": "1.0.0",
   "description": "Review and declutter your vault one note at a time. Keep or trash notes with keyboard shortcuts, track progress across sessions.",
   "author": "Gabriel Silvestri",
