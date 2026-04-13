@@ -65,18 +65,18 @@ export class ReviewModal extends Modal {
     const { contentEl } = this;
     contentEl.empty();
 
-    contentEl.createEl('p', { text: 'Continuar sessão anterior?', cls: 'nr-title' });
+    contentEl.createEl('p', { text: 'Continue previous session?', cls: 'nr-title' });
     contentEl.createEl('p', {
-      text: `${remaining.length} notas restantes de ${total} total`,
+      text: `${remaining.length} notes remaining out of ${total} total`,
       cls: 'nr-subtitle',
     });
 
     const btnRow = contentEl.createDiv({ cls: 'nr-btn-row' });
     btnRow
-      .createEl('button', { text: 'Nova sessão', cls: 'nr-btn nr-btn-secondary' })
+      .createEl('button', { text: 'New session', cls: 'nr-btn nr-btn-secondary' })
       .addEventListener('click', () => this.startNewSession(this.app.vault.getMarkdownFiles()));
     btnRow
-      .createEl('button', { text: 'Continuar', cls: 'nr-btn nr-btn-primary' })
+      .createEl('button', { text: 'Continue', cls: 'nr-btn nr-btn-primary' })
       .addEventListener('click', () => this.continueSession(remaining));
   }
 
@@ -128,10 +128,10 @@ export class ReviewModal extends Modal {
       cls: 'nr-counter',
     });
     left.createEl('span', {
-      text: `${this.deletedInSession.length} no lixo`,
+      text: `${this.deletedInSession.length} in trash`,
       cls: 'nr-pill-del',
     });
-    const undoBtn = header.createEl('button', { text: '↩ desfazer', cls: 'nr-undo-btn' });
+    const undoBtn = header.createEl('button', { text: '↩ undo', cls: 'nr-undo-btn' });
     if (this.undoStack.length === 0) undoBtn.setAttribute('disabled', 'true');
     undoBtn.addEventListener('click', () => this.undo());
 
@@ -150,26 +150,26 @@ export class ReviewModal extends Modal {
     const titleRow = card.createDiv({ cls: 'nr-title-row' });
     titleRow.createEl('p', { text: file.basename, cls: 'nr-note-title' });
     titleRow
-      .createEl('button', { text: '↗ abrir', cls: 'nr-btn-open' })
+      .createEl('button', { text: '↗ open', cls: 'nr-btn-open' })
       .addEventListener('click', () => {
         this.app.workspace.openLinkText(file.basename, file.path, false);
       });
 
     const body = card.createDiv({ cls: 'nr-nbody' });
-    body.setText('carregando...');
+    body.setText('loading...');
     this.loadContent(file, body);
 
     // Action buttons
     const btnRow = contentEl.createDiv({ cls: 'nr-btn-row' });
     btnRow
-      .createEl('button', { text: '✕  lixo', cls: 'nr-btn nr-btn-del' })
+      .createEl('button', { text: '✕  trash', cls: 'nr-btn nr-btn-del' })
       .addEventListener('click', () => this.decide(false));
     btnRow
-      .createEl('button', { text: '✓  manter', cls: 'nr-btn nr-btn-keep' })
+      .createEl('button', { text: '✓  keep', cls: 'nr-btn nr-btn-keep' })
       .addEventListener('click', () => this.decide(true));
 
     contentEl.createEl('p', {
-      text: '← D  deletar       manter  K →       Z desfazer       espaço manter',
+      text: '← D  trash       keep  K →       Z undo       space keep',
       cls: 'nr-hint',
     });
   }
@@ -179,14 +179,14 @@ export class ReviewModal extends Modal {
       const content = await this.app.vault.cachedRead(file);
       el.empty();
       if (!content.trim()) {
-        el.createEl('em', { text: 'nota vazia', cls: 'nr-empty' });
+        el.createEl('em', { text: 'empty note', cls: 'nr-empty' });
         return;
       }
       const preview =
-        content.length > 4000 ? content.slice(0, 4000) + '\n\n---\n*[...truncado]*' : content;
+        content.length > 4000 ? content.slice(0, 4000) + '\n\n---\n*[...truncated]*' : content;
       await MarkdownRenderer.render(this.app, preview, el, file.path, this.component);
     } catch {
-      el.setText('erro ao ler arquivo');
+      el.setText('error reading file');
     }
   }
 
@@ -253,23 +253,23 @@ export class ReviewModal extends Modal {
     const { contentEl } = this;
     contentEl.empty();
 
-    contentEl.createEl('p', { text: 'Revisão concluída!', cls: 'nr-done-title' });
+    contentEl.createEl('p', { text: 'Review complete!', cls: 'nr-done-title' });
     contentEl.createEl('p', {
       text:
         this.deletedInSession.length > 0
-          ? `${this.deletedInSession.length} notas foram para a lixeira.`
-          : 'Nenhuma nota foi deletada.',
+          ? `${this.deletedInSession.length} notes moved to trash.`
+          : 'No notes were deleted.',
       cls: 'nr-subtitle',
     });
 
     const stats = contentEl.createDiv({ cls: 'nr-stats' });
 
     const keptCard = stats.createDiv({ cls: 'nr-statcard' });
-    keptCard.createEl('p', { text: 'mantidas', cls: 'nr-stat-label' });
+    keptCard.createEl('p', { text: 'kept', cls: 'nr-stat-label' });
     keptCard.createEl('p', { text: String(kept), cls: 'nr-stat-value' });
 
     const delCard = stats.createDiv({ cls: 'nr-statcard' });
-    delCard.createEl('p', { text: 'no lixo', cls: 'nr-stat-label' });
+    delCard.createEl('p', { text: 'in trash', cls: 'nr-stat-label' });
     delCard.createEl('p', { text: String(this.deletedInSession.length), cls: 'nr-stat-value' });
 
     if (this.deletedInSession.length > 0) {
@@ -281,7 +281,7 @@ export class ReviewModal extends Modal {
       });
       if (this.deletedInSession.length > 80) {
         contentEl.createEl('p', {
-          text: `...e mais ${this.deletedInSession.length - 80}`,
+          text: `...and ${this.deletedInSession.length - 80} more`,
           cls: 'nr-hint',
         });
       }
@@ -292,7 +292,7 @@ export class ReviewModal extends Modal {
 
     contentEl
       .createDiv({ cls: 'nr-btn-row' })
-      .createEl('button', { text: 'Nova sessão', cls: 'nr-btn nr-btn-primary' })
+      .createEl('button', { text: 'New session', cls: 'nr-btn nr-btn-primary' })
       .addEventListener('click', () => this.startNewSession(this.app.vault.getMarkdownFiles()));
   }
 }
